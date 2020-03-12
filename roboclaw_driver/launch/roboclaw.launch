@@ -27,8 +27,8 @@
         <!-- The number of encoder ticks per meter of movement straight forwards-->
         <param name="ticks_per_meter" type="double" value="4342.2"/> 
         <!-- Maximum time before the motor automatically stops after a command in seconds-->
-        <param name="max_secs" type="int" value="1000"/> 
-    </node>
+        <param name="max_secs" type="int" value="1"/> 
+    <!--/node>
 
     <!-- right wheels driver. Edit connection details -->
     <node if="$(arg 4WD)" name="roboclawR" pkg="roboclaw_driver" type="roboclaw_node.py">
