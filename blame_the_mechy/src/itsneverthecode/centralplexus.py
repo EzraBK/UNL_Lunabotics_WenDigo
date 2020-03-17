@@ -8,8 +8,16 @@ global robocommand
 # Receives joystick messages (subscribed to Joy topic)
 # then converts the joysick inputs to commands for the roboclaw
 # axis 1 aka left stick vertical controls forwards/ backwards
-m1_speed = 0
-m2_speed = 0
+#m1_speed = 0
+#m2_speed = 0
+
+drive_right = 0
+drive_left = 0
+drive_rotate = 0
+dig_actuators = 0
+hopper_actuator = 0
+dig_belt = 0
+
 accel_var = 4000
 max_secs_var = 1
 
@@ -28,19 +36,26 @@ max_secs_var = 1
 '''
 
 def callback(data):
-    global m1_speed
-    global m2_speed
+    #global m1_speed
+    #global m2_speed
+    global drive_right
+    global drive_left
+    global drive_rotate
+    global dig_actuators
+    global dig_belt
+    global hopper_actuator
+    
     global max_secs_var
     global accel_var
     #data.axes[2]
     #print data.buttons[0]
     if data.buttons[0] == 1:
-        m2_speed = 0
-        m1_speed = 0
+        drive_right = 0
+        drive_left = 0
         print "STOP"
     else:
-        m2_speed = 1000*data.axes[1]
-        m1_speed = 1000*data.axes[1]
+        drive_left = 1000*data.axes[1]
+        drive_right = 1000*data.axes[1]
         print "GO"
     if data.buttons[1] == 1:
         print "NATE IS GREAT"
@@ -50,14 +65,14 @@ def callback(data):
 # Intializes everything
 def start():
     # publishing to "roboclaw/speed_command" 
-    global m1_speed
-    global m2_speed
+    global drive_right
+    global drive_left
     global max_secs_var
     global accel_var
     rospy.init_node('Joy2Turtle')
     robocommand = SpeedCommand()
     FourWD = rospy.get_param("motor_control/4WD")
-    #pub = rospy.Publisher('roboclaw/speed_command', SpeedCommand,queue_size=10)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ,   
     motor_right_pub = rospy.Publisher('roboclaw/speed_command/right', SpeedCommand, queue_size = 1)
     motor_left_pub = rospy.Publisher('roboclaw/speed_command/left', SpeedCommand, queue_size = 1)
     
@@ -73,20 +88,15 @@ def start():
     while not rospy.is_shutdown():
         msgR = SpeedCommand()
         msgL = SpeedCommand()
-        msgR.m1_qpps = -m1_speed
-        msgR.m2_qpps = m1_speed
+        msgR.m1_qpps = -drive_right
+        msgR.m2_qpps = drive_right
         msgR.max_secs = max_secs_var
-        msgL.m1_qpps = m2_speed
-        msgL.m2_qpps = m2_speed
+        msgL.m1_qpps = drive_left
+        msgL.m2_qpps = drive_left
         msgL.max_secs = max_secs_var
         motor_right_pub.publish(msgR)
         motor_left_pub.publish(msgL)
         
-        #robocommand.m1_qpps = m1_speed
-        #robocommand.m2_qpps = m2_speed
-        #robocommand.max_secs = max_secs_var
-        #robocommand.accel = accel_var
-        #pub.publish(robocommand)
         rate.sleep()
     rospy.spin()
 
