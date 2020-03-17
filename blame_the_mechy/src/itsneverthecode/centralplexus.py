@@ -52,14 +52,26 @@ def callback(data):
     if data.buttons[0] == 1:
         drive_right = 0
         drive_left = 0
+        drive_rotate = 0
+        dig_actuators = 0
+        hopper_actuator = 0
+        dig_belt = 0
         print "STOP"
     else:
         drive_left = 1000*data.axes[1]
         drive_right = 1000*data.axes[1]
+        drive_rotate = 500*data.buttons[5]
         print "GO"
     if data.buttons[1] == 1:
         print "NATE IS GREAT"
-        #print "assigning new values!"    
+        #print "assigning new values!"
+    if data.buttons[5] == 1:
+        drive_rotate = 10
+        print "rotate drive to turn"
+    if data.buttons[4] == 1:
+        drive_rotate = -10
+        print "rotate drive to drive"
+    if data.buttons[0] == 
     
 
 # Intializes everything
